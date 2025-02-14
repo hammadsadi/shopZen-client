@@ -15,12 +15,16 @@ import Link from "next/link";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { registerValidationSchema } from "./registerValidation";
 import { userRegister } from "@/services/AuthServices";
+import { toast } from "sonner";
+import { LoaderCircle } from "lucide-react";
 
 const Register = () => {
   const form = useForm({
     resolver: zodResolver(registerValidationSchema),
   });
-
+  const {
+    formState: { isSubmitting },
+  } = form;
   // Form Value Watch
   const password = form.watch("password");
   const confirmPassword = form.watch("confirmPassword");
@@ -28,8 +32,14 @@ const Register = () => {
   // Register Form Handle
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
+      // Form Data Send to Server action
       const res = await userRegister(data);
-      console.log(res);
+      // Toast Handle
+      if (res?.success) {
+        toast.success(res?.message);
+      } else {
+        toast.error(res?.message);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -118,7 +128,11 @@ const Register = () => {
               type="submit"
               className="w-full mt-2"
             >
-              Register
+              {isSubmitting ? (
+                <LoaderCircle className="animate-spin" />
+              ) : (
+                "Register"
+              )}
             </Button>
             <p className="mt-2 text-center text-sm">
               Already have an account?{" "}
