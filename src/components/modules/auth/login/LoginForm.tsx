@@ -1,6 +1,8 @@
 "use client";
 import ShopZenLogo from "@/components/shared/Logo/ShopZenLogo";
 import { Button } from "@/components/ui/button";
+import ReCAPTCHA from "react-google-recaptcha";
+
 import {
   Form,
   FormControl,
@@ -41,6 +43,12 @@ const LoginForm = () => {
       console.error(error);
     }
   };
+
+  // Handle RecapCha
+  const handleRecapCha = (value: string | null) => {
+    console.log(value);
+  };
+
   return (
     <div className="w-full min-h-screen flex justify-center items-center">
       <div className="max-w-md w-full bg-white border p-7 md:p-10 rounded">
@@ -48,14 +56,11 @@ const LoginForm = () => {
           <ShopZenLogo />
           <div className="space-y-1">
             <h2 className="font-bold text-lg md:text-2xl">ShopZen</h2>
-            <p className="text-xs">
-              Welcome Back!
-            </p>
+            <p className="text-xs">Welcome Back!</p>
           </div>
         </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            
             <FormField
               control={form.control}
               name="email"
@@ -86,12 +91,13 @@ const LoginForm = () => {
                 </FormItem>
               )}
             />
-           
-            <Button
-           
-              type="submit"
-              className="w-full mt-2"
-            >
+            <div>
+              <ReCAPTCHA
+                sitekey={process.env.NEXT_PUBLIC_RECAPCHA_CLIENT_KEY as string}
+                onChange={handleRecapCha}
+              />
+            </div>
+            <Button type="submit" className="w-full mt-2">
               {isSubmitting ? (
                 <LoaderCircle className="animate-spin" />
               ) : (
