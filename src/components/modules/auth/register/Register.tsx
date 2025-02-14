@@ -14,15 +14,25 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { registerValidationSchema } from "./registerValidation";
+import { userRegister } from "@/services/AuthServices";
 
 const Register = () => {
   const form = useForm({
     resolver: zodResolver(registerValidationSchema),
   });
+
+  // Form Value Watch
   const password = form.watch("password");
   const confirmPassword = form.watch("confirmPassword");
+
+  // Register Form Handle
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    console.log(data);
+    try {
+      const res = await userRegister(data);
+      console.log(res);
+    } catch (error) {
+      console.error(error);
+    }
   };
   return (
     <div className="w-full min-h-screen flex justify-center items-center">
