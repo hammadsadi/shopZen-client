@@ -2,6 +2,7 @@
 
 import { cookies } from "next/headers";
 import { FieldValues } from "react-hook-form";
+import { jwtDecode } from "jwt-decode";
 
 // Register User
 export const userRegister = async (userInfo: FieldValues) => {
@@ -13,7 +14,11 @@ export const userRegister = async (userInfo: FieldValues) => {
       },
       body: JSON.stringify(userInfo),
     });
-    return res.json();
+    const result = await res.json();
+    if (result?.success) {
+      (await cookies()).set("accessToken", result?.data?.accessToken);
+    }
+    return result;
   } catch (error: any) {
     return Error(error);
   }
@@ -36,5 +41,17 @@ export const userLogin = async (userInfo: FieldValues) => {
     return result;
   } catch (error: any) {
     return Error(error);
+  }
+};
+
+// Get Current Logedin User From Cookie
+export const getCurrentUser = async () => {
+  const accesstoken = (await cookies()).get("accessToken")?.value;
+  let decodeData = null;
+  if (accesstoken) {
+    decodeData = await jwtDecode(accesstoken);
+    return decodeData;
+  } else {
+    return null;
   }
 };
