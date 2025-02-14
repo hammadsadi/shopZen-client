@@ -1,5 +1,6 @@
 "use server";
 
+import { cookies } from "next/headers";
 import { FieldValues } from "react-hook-form";
 
 // Register User
@@ -28,7 +29,11 @@ export const userLogin = async (userInfo: FieldValues) => {
       },
       body: JSON.stringify(userInfo),
     });
-    return res.json();
+    const result = await res.json();
+    if (result?.success) {
+      (await cookies()).set("accessToken", result?.data?.accessToken);
+    }
+    return result;
   } catch (error: any) {
     return Error(error);
   }
