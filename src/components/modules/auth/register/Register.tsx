@@ -1,16 +1,29 @@
 'use client'
 import ShopZenLogo from "@/components/shared/Logo/ShopZenLogo"
 import { Button } from "@/components/ui/button"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import Link from "next/link"
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { registerValidationSchema } from "./registerValidation";
 
 const Register = () => {
-    const form = useForm()
-    const onSubmit: SubmitHandler<FieldValues> = async (data) =>{
-        console.log(data)
-    }
+  const form = useForm({
+    resolver: zodResolver(registerValidationSchema),
+  });
+  const password = form.watch("password");
+  const confirmPassword = form.watch("confirmPassword");
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    console.log(data);
+  };
   return (
     <div className="w-full min-h-screen flex justify-center items-center">
       <div className="max-w-md w-full bg-white border p-7 md:p-10 rounded">
@@ -34,7 +47,6 @@ const Register = () => {
                   <FormControl>
                     <Input {...field} value={field.value || ""} />
                   </FormControl>
-                  <FormDescription />
                   <FormMessage />
                 </FormItem>
               )}
@@ -48,7 +60,6 @@ const Register = () => {
                   <FormControl>
                     <Input {...field} value={field.value || ""} />
                   </FormControl>
-                  <FormDescription />
                   <FormMessage />
                 </FormItem>
               )}
@@ -66,7 +77,6 @@ const Register = () => {
                       value={field.value || ""}
                     />
                   </FormControl>
-                  <FormDescription />
                   <FormMessage />
                 </FormItem>
               )}
@@ -84,12 +94,20 @@ const Register = () => {
                       value={field.value || ""}
                     />
                   </FormControl>
-                  <FormDescription />
-                  <FormMessage />
+
+                  {confirmPassword && password !== confirmPassword ? (
+                    <FormMessage>Password does not match</FormMessage>
+                  ) : (
+                    <FormMessage />
+                  )}
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full mt-2">
+            <Button
+              disabled={confirmPassword && password !== confirmPassword}
+              type="submit"
+              className="w-full mt-2"
+            >
               Register
             </Button>
             <p className="mt-2 text-center text-sm">
@@ -103,6 +121,6 @@ const Register = () => {
       </div>
     </div>
   );
-}
+};
 
 export default Register
