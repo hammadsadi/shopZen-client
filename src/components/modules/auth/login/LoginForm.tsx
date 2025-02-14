@@ -1,7 +1,7 @@
 "use client";
 import ShopZenLogo from "@/components/shared/Logo/ShopZenLogo";
 import { Button } from "@/components/ui/button";
-import ReCAPTCHA from "react-google-recaptcha";
+// import ReCAPTCHA from "react-google-recaptcha";
 
 import {
   Form,
@@ -19,11 +19,13 @@ import { userLogin } from "@/services/AuthServices";
 import { toast } from "sonner";
 import { LoaderCircle } from "lucide-react";
 import { loginValidationSchema } from "./loginValidation";
+// import { useState } from "react";
 
 const LoginForm = () => {
   const form = useForm({
     resolver: zodResolver(loginValidationSchema),
   });
+  // const [reCaptchaStatus, setReCaptchaStatus] = useState(false);
   const {
     formState: { isSubmitting },
   } = form;
@@ -45,9 +47,17 @@ const LoginForm = () => {
   };
 
   // Handle RecapCha
-  const handleRecapCha = (value: string | null) => {
-    console.log(value);
-  };
+  // const handleRecapCha = async (value: string | null) => {
+  //   try {
+  //     const res = await googleRecaptchaVerify(value!);
+  //     console.log(res);
+  //     if (res?.success) {
+  //       setReCaptchaStatus(true);
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   return (
     <div className="w-full min-h-screen flex justify-center items-center">
@@ -91,13 +101,17 @@ const LoginForm = () => {
                 </FormItem>
               )}
             />
-            <div>
+            {/* <div>
               <ReCAPTCHA
                 sitekey={process.env.NEXT_PUBLIC_RECAPCHA_CLIENT_KEY as string}
                 onChange={handleRecapCha}
               />
-            </div>
-            <Button type="submit" className="w-full mt-2">
+            </div> */}
+            <Button
+              // disabled={reCaptchaStatus ? false : true}
+              type="submit"
+              className="w-full mt-2"
+            >
               {isSubmitting ? (
                 <LoaderCircle className="animate-spin" />
               ) : (
