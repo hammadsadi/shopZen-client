@@ -18,7 +18,7 @@ import { userRegister } from "@/services/AuthServices";
 import { toast } from "sonner";
 import { LoaderCircle } from "lucide-react";
 
-const Register = () => {
+const RegisterForm = () => {
   const form = useForm({
     resolver: zodResolver(registerValidationSchema),
   });
@@ -147,4 +147,4 @@ const Register = () => {
   );
 };
 
-export default Register
+export default RegisterForm;
