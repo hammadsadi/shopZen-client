@@ -45,9 +45,11 @@ export default function Navbar() {
 
           {user ? (
             <>
-              <Button variant="outline" className="rounded-full">
-                Create Shop
-              </Button>
+              <Link href="/create-shop">
+                <Button variant="outline" className="rounded-full">
+                  Create Shop
+                </Button>
+              </Link>
               <DropdownMenu>
                 <DropdownMenuTrigger>
                   <Avatar>

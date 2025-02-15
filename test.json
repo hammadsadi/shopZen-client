@@ -1,0 +1,19 @@
+{
+  "shopName": "Tech Solutions II",
+  "businessLicenseNumber": "BSN-1234567890",
+  "address": "123 Tech Street, Silicon Valley, CA",
+  "contactNumber": "+1-123-456-7890",
+  "website": "https://www.techsolutions.com",
+  "servicesOffered": [
+    "Computer Repair",
+    "Network Installation",
+    "Software Development"
+  ],
+  "establishedYear": 2015,
+  "socialMediaLinks": {
+    "facebook": "https://facebook.com/techsolutions",
+    "twitter": "https://twitter.com/techsolutions",
+    "instagram": "https://instagram.com/techsolutions"
+  },
+  "taxIdentificationNumber": "TIN-987654381"
+}
