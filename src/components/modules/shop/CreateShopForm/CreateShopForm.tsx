@@ -1,6 +1,6 @@
 'use client'
 import { Button } from "@/components/ui/button";
-import React from "react";
+import React, { useState } from "react";
 import {
   Form,
   FormControl,
@@ -14,12 +14,15 @@ import ShopZenLogo from "@/components/shared/Logo/ShopZenLogo";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import SZImageUpload from "@/components/ui/core/SZImageUpload";
+import SHImagePreview from "@/components/ui/core/SZImageUpload/SHImagePreview";
 const CreateShopForm = () => {
+  const [imageFiels, setImageFiels] = useState<File[] | []>([]);
+  const [imagePreview, setImagePreview] = useState<string[] | []>([]);
   const form = useForm();
 
   // Register Form Handle
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    console.log(data)
+    console.log(data);
     // try {
     //   // Form Data Send to Server action
     //   const res = await userLogin(data);
@@ -196,9 +199,27 @@ const CreateShopForm = () => {
                   )}
                 />
               </div>
-              <div className="mt-4">
-                <SZImageUpload/>
-              </div>
+              {imagePreview?.length > 0 ? (
+                <div className="mt-4">
+                  <SHImagePreview
+                    setImageFiels={setImageFiels}
+                    imagePreview={imagePreview}
+                    setImagePreview={setImagePreview}
+                    className="flex justify-center"
+                  />
+                </div>
+              ) : (
+                <div className="mt-4">
+                  <SZImageUpload
+                    imageFiels={imageFiels}
+                    setImageFiels={setImageFiels}
+                    imagePreview={imagePreview}
+                    setImagePreview={setImagePreview}
+                    imageFileLabel="Upload Logo"
+                  />
+                </div>
+              )}
+
               <Button type="submit" className="w-full mt-2">
                 {/* {isSubmitting ? (
                   <LoaderCircle className="animate-spin" />
