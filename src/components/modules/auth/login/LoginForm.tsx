@@ -1,7 +1,7 @@
 "use client";
 import ShopZenLogo from "@/components/shared/Logo/ShopZenLogo";
 import { Button } from "@/components/ui/button";
-// import ReCAPTCHA from "react-google-recaptcha";
+import ReCAPTCHA from "react-google-recaptcha";
 
 import {
   Form,
@@ -15,17 +15,17 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import { userLogin } from "@/services/AuthServices";
+import { googleRecaptchaVerify, userLogin } from "@/services/AuthServices";
 import { toast } from "sonner";
 import { LoaderCircle } from "lucide-react";
 import { loginValidationSchema } from "./loginValidation";
-// import { useState } from "react";
+import { useState } from "react";
 
 const LoginForm = () => {
   const form = useForm({
     resolver: zodResolver(loginValidationSchema),
   });
-  // const [reCaptchaStatus, setReCaptchaStatus] = useState(false);
+  const [reCaptchaStatus, setReCaptchaStatus] = useState(false);
   const {
     formState: { isSubmitting },
   } = form;
@@ -47,17 +47,17 @@ const LoginForm = () => {
   };
 
   // Handle RecapCha
-  // const handleRecapCha = async (value: string | null) => {
-  //   try {
-  //     const res = await googleRecaptchaVerify(value!);
-  //     console.log(res);
-  //     if (res?.success) {
-  //       setReCaptchaStatus(true);
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
+  const handleRecapCha = async (value: string | null) => {
+    try {
+      const res = await googleRecaptchaVerify(value!);
+      console.log(res);
+      if (res?.success) {
+        setReCaptchaStatus(true);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="w-full min-h-screen flex justify-center items-center">
@@ -101,14 +101,14 @@ const LoginForm = () => {
                 </FormItem>
               )}
             />
-            {/* <div>
+            <div className="flex justify-center mt-4 w-full">
               <ReCAPTCHA
-                sitekey={process.env.NEXT_PUBLIC_RECAPCHA_CLIENT_KEY as string}
+                sitekey={process.env.NEXT_PUBLIC_RECAPCHA_CLIENT_KEY!}
                 onChange={handleRecapCha}
               />
-            </div> */}
+            </div>
             <Button
-              // disabled={reCaptchaStatus ? false : true}
+              disabled={reCaptchaStatus ? false : true}
               type="submit"
               className="w-full mt-2"
             >
