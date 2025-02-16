@@ -1,10 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { useUser } from "@/context/UserContext";
 
 const HomePage = () => {
-  const user = useUser();
-  console.log(user);
   return (
     <div className="bg-white">
       <Button>Click Me</Button>

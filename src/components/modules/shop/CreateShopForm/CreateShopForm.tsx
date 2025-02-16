@@ -15,26 +15,51 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import SZImageUpload from "@/components/ui/core/SZImageUpload";
 import SHImagePreview from "@/components/ui/core/SZImageUpload/SHImagePreview";
+import { toast } from "sonner";
+import { createShop } from "@/services/Shop";
+import { LoaderCircle } from "lucide-react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { shopValidationSchema } from "./shopValidation";
 const CreateShopForm = () => {
   const [imageFiels, setImageFiels] = useState<File[] | []>([]);
   const [imagePreview, setImagePreview] = useState<string[] | []>([]);
-  const form = useForm();
+  const form = useForm({
+    resolver: zodResolver(shopValidationSchema),
+  });
+  const {
+    formState: { isSubmitting },
+  } = form;
 
   // Register Form Handle
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    console.log(data);
-    // try {
-    //   // Form Data Send to Server action
-    //   const res = await userLogin(data);
-    //   // Toast Handle
-    //   if (res?.success) {
-    //     toast.success(res?.message);
-    //   } else {
-    //     toast.error(res?.message);
-    //   }
-    // } catch (error) {
-    //   console.error(error);
-    // }
+    // Remove White Space and Empty String
+    const servicesOffered = data?.servicesOffered
+      ?.split(",")
+      .map((service: string) => service.trim())
+      .filter((item: string) => item !== '""' && item !== "''" && item !== "");
+
+    // Modefied Data
+    const modifiedData = {
+      ...data,
+      servicesOffered: servicesOffered,
+      establishedYear: Number(data?.establishedYear),
+    };
+
+    try {
+      // Append Data
+      const formData = new FormData();
+      formData.append("data", JSON.stringify(modifiedData));
+      formData.append("logo", imageFiels[0] as File);
+      const res = await createShop(formData);
+      // Toast Handle
+      if (res?.success) {
+        toast.success(res?.message);
+      } else {
+        toast.error(res?.message);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
   return (
     <div>
@@ -124,7 +149,11 @@ const CreateShopForm = () => {
                     <FormItem>
                       <FormLabel>Established Year</FormLabel>
                       <FormControl>
-                        <Input {...field} value={field.value || ""} />
+                        <Input
+                          type="number"
+                          {...field}
+                          value={field.value || ""}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -221,12 +250,11 @@ const CreateShopForm = () => {
               )}
 
               <Button type="submit" className="w-full mt-2">
-                {/* {isSubmitting ? (
+                {isSubmitting ? (
                   <LoaderCircle className="animate-spin" />
                 ) : (
-                  "Login"
-                )} */}
-                Create
+                  "Create"
+                )}
               </Button>
             </form>
           </Form>
