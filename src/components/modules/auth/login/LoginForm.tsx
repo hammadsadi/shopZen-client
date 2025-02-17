@@ -20,12 +20,16 @@ import { toast } from "sonner";
 import { LoaderCircle } from "lucide-react";
 import { loginValidationSchema } from "./loginValidation";
 import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const LoginForm = () => {
   const form = useForm({
     resolver: zodResolver(loginValidationSchema),
   });
   const [reCaptchaStatus, setReCaptchaStatus] = useState(false);
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirectPath");
+  const router = useRouter();
   const {
     formState: { isSubmitting },
   } = form;
@@ -38,6 +42,11 @@ const LoginForm = () => {
       // Toast Handle
       if (res?.success) {
         toast.success(res?.message);
+        if (redirect) {
+          router.push(redirect);
+        } else {
+          router.push("/profile");
+        }
       } else {
         toast.error(res?.message);
       }
