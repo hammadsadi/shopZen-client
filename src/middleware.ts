@@ -5,7 +5,7 @@ import { getCurrentUser } from "./services/AuthServices";
 type TRole = keyof typeof roleBasedPrivate
 const authRoutes = ['/login', '/register']
 const roleBasedPrivate = {
-  user: [/^\/user/],
+  user: [/^\/user/, /^\/create-shop/],
   admin: [/^\/admin/],
 };
 export const middleware = async(request:NextRequest) =>{
