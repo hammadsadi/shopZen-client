@@ -29,7 +29,7 @@ const DeleteConfirmationModal: React.FC<DeleteModalProps> = ({
           <DialogTitle>Delete Item</DialogTitle>
           <DialogDescription>
             Are you sure you want to delete
-            <span className="font-semibold text-red-500">{name}</span>? This
+            <span className="font-semibold text-red-500"> {name}</span>? This
             action cannot be undone.
           </DialogDescription>
         </DialogHeader>
