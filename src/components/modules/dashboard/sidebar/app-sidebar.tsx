@@ -2,12 +2,11 @@
 
 import * as React from "react";
 import {
-  BookOpen,
-  Bot,
   Frame,
   Map,
   PieChart,
   Settings2,
+  ShoppingBag,
   SquareTerminal,
 } from "lucide-react";
 
@@ -42,28 +41,23 @@ const data = {
       isActive: true,
     },
     {
-      title: "Models",
-      url: "#",
-      icon: Bot,
+      title: "Shop",
+      url: "/user/shop/all-products",
+      icon: ShoppingBag,
       items: [
         {
-          title: "Genesis",
-          url: "#",
+          title: "Manage Products",
+          url: "/user/shop/all-products",
         },
         {
-          title: "Explorer",
-          url: "#",
+          title: "Manage Categories",
+          url: "/user/shop/categories",
         },
         {
-          title: "Quantum",
-          url: "#",
+          title: "Manage Brands",
+          url: "/user/shop/brands",
         },
       ],
-    },
-    {
-      title: "Documentation",
-      url: "#",
-      icon: BookOpen,
     },
     {
       title: "Settings",
@@ -71,19 +65,7 @@ const data = {
       icon: Settings2,
       items: [
         {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
+          title: "Profile",
           url: "#",
         },
       ],
