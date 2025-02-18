@@ -43,6 +43,9 @@ const CreateCategoryModal = () => {
          // Toast Handle
          if (res?.success) {
            toast.success(res?.message);
+           form.reset();
+           setImageFiels([]);
+           setImagePreview([]);
          } else {
            toast.error(res?.errorSources[0]?.message);
          }

@@ -42,6 +42,9 @@ const CreateBrandModal = () => {
       // Toast Handle
       if (res?.success) {
         toast.success(res?.message);
+        setImageFiels([]);
+        setImagePreview([]);
+        form.reset();
       } else {
         toast.error(res?.errorSources[0]?.message);
       }
