@@ -2,12 +2,9 @@
 
 import * as React from "react";
 import {
-  AudioWaveform,
   BookOpen,
   Bot,
-  Command,
   Frame,
-  GalleryVerticalEnd,
   Map,
   PieChart,
   Settings2,
@@ -19,12 +16,15 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { TeamSwitcher } from "./team-switcher";
 import { NavMain } from "./nav-main";
-import { NavProjects } from "./nav-projects";
 import { NavUser } from "./nav-user";
+import Link from "next/link";
+import ShopZenLogo from "@/components/shared/Logo/ShopZenLogo";
 
 // This is sample data.
 const data = {
@@ -33,43 +33,13 @@ const data = {
     email: "m@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
-  teams: [
-    {
-      name: "Acme Inc",
-      logo: GalleryVerticalEnd,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
-  ],
+
   navMain: [
     {
-      title: "Playground",
-      url: "#",
+      title: "Dashboard",
+      url: "/user/dashboard",
       icon: SquareTerminal,
       isActive: true,
-      items: [
-        {
-          title: "History",
-          url: "#",
-        },
-        {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
-        },
-      ],
     },
     {
       title: "Models",
@@ -94,24 +64,6 @@ const data = {
       title: "Documentation",
       url: "#",
       icon: BookOpen,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
     },
     {
       title: "Settings",
@@ -160,14 +112,27 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton size="lg" asChild>
+              <Link href="/">
+                <div className="flex items-center justify-center">
+                  <ShopZenLogo />
+                </div>
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                  <h2 className="font-bold text-xl">ShopZen</h2>
+                </div>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        {/* <NavProjects projects={data.projects} /> */}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
