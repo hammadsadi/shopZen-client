@@ -9,7 +9,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import {
+  FieldValues,
+  SubmitHandler,
+  useFieldArray,
+  useForm,
+} from "react-hook-form";
 import ShopZenLogo from "@/components/shared/Logo/ShopZenLogo";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -17,15 +22,36 @@ import SZImageUpload from "@/components/ui/core/SZImageUpload";
 import SHImagePreview from "@/components/ui/core/SZImageUpload/SHImagePreview";
 import { toast } from "sonner";
 import { createShop } from "@/services/Shop";
-import { LoaderCircle } from "lucide-react";
+import { LoaderCircle, PlusIcon } from "lucide-react";
 const AddProductPage = () => {
   const [imageFiels, setImageFiels] = useState<File[] | []>([]);
   const [imagePreview, setImagePreview] = useState<string[] | []>([]);
-  const form = useForm();
+  const form = useForm({
+    defaultValues: {
+      name: "",
+      description: "",
+      price: "",
+      stock: "",
+      weight: "",
+      category: "",
+      brand: "",
+      availableColors: [{ value: "" }],
+      keyFeatures: "",
+    },
+  });
   const {
     formState: { isSubmitting },
   } = form;
 
+  // Dynamic Colors Field Add
+  const { append: colorAppend, fields: colorField } = useFieldArray({
+    control: form.control,
+    name: "availableColors",
+  });
+
+  const addColor = () => {
+    colorAppend({ value: "" });
+  };
   // Register Form Handle
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     // Remove White Space and Empty String
@@ -124,7 +150,7 @@ const AddProductPage = () => {
                 />
                 <FormField
                   control={form.control}
-                  name="category.name"
+                  name="category"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Category</FormLabel>
@@ -135,22 +161,10 @@ const AddProductPage = () => {
                     </FormItem>
                   )}
                 />
+
                 <FormField
                   control={form.control}
-                  name="shop.shopName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Shop Name</FormLabel>
-                      <FormControl>
-                        <Input {...field} value={field.value || ""} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="brand.name"
+                  name="brand"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Brand Name</FormLabel>
@@ -161,7 +175,39 @@ const AddProductPage = () => {
                     </FormItem>
                   )}
                 />
-
+                {/* Available Colors */}
+                <div>
+                  <div className="flex justify-between items-center">
+                    <p className="font-bold">Available Colors</p>
+                    <Button
+                      onClick={addColor}
+                      variant="outline"
+                      className="size-8"
+                      type="button"
+                    >
+                      <PlusIcon />
+                    </Button>
+                  </div>
+                  <div>
+                    {colorField?.map((item, idx) => (
+                      <div key={item?.id}>
+                        <FormField
+                          control={form.control}
+                          name={`availableColors.${idx}.value`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Color {idx + 1}</FormLabel>
+                              <FormControl>
+                                <Input {...field} value={field.value || ""} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
                 <FormField
                   control={form.control}
                   name="description"
@@ -176,26 +222,6 @@ const AddProductPage = () => {
                   )}
                 />
               </div>
-              {/* {imagePreview?.length > 0 ? (
-                <div className="mt-4">
-                  <SHImagePreview
-                    setImageFiels={setImageFiels}
-                    imagePreview={imagePreview}
-                    setImagePreview={setImagePreview}
-                    className="flex justify-center"
-                  />
-                </div>
-              ) : (
-                <div className="mt-4">
-                  <SZImageUpload
-                    imageFiels={imageFiels}
-                    setImageFiels={setImageFiels}
-                    imagePreview={imagePreview}
-                    setImagePreview={setImagePreview}
-                    imageFileLabel="Upload Logo"
-                  />
-                </div>
-              )} */}
 
               {imagePreview?.length > 0 && (
                 <div className="mt-4">
