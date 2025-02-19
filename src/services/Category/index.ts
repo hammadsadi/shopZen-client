@@ -26,7 +26,7 @@ export const getAllCategory = async () => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/category`, {
       method: "GET",
       headers: {
-        Authorization: (await cookies()).get("accessToken")!.value,
+        Authorization: (await cookies()).get("accessToken")?.value as string,
       },
       next: {
         tags: ["CATEGORY"],
@@ -35,6 +35,7 @@ export const getAllCategory = async () => {
 
     return res.json();
   } catch (error: any) {
+    console.log(error);
     return Error(error);
   }
 };

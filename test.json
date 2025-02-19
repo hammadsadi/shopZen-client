@@ -1,19 +1,162 @@
-{
-  "shopName": "Tech Solutions II",
-  "businessLicenseNumber": "BSN-1234567890",
-  "address": "123 Tech Street, Silicon Valley, CA",
-  "contactNumber": "+1-123-456-7890",
-  "website": "https://www.techsolutions.com",
-  "servicesOffered": [
-    "Computer Repair",
-    "Network Installation",
-    "Software Development"
-  ],
-  "establishedYear": 2015,
-  "socialMediaLinks": {
-    "facebook": "https://facebook.com/techsolutions",
-    "twitter": "https://twitter.com/techsolutions",
-    "instagram": "https://instagram.com/techsolutions"
+[
+  {
+    "name": "Gaming Laptop X1",
+    "description": "High-performance gaming laptop with RGB keyboard and advanced cooling system.",
+    "price": 1499.99,
+    "stock": 25,
+    "weight": 2.5,
+    "availableColors": ["Black", "Red"],
+    "specification": {
+      "processor": "Intel Core i9-12900H",
+      "ram": "32GB DDR5",
+      "storage": "1TB SSD",
+      "display": "17.3-inch 240Hz FHD"
+    },
+    "keyFeatures": ["RGB Keyboard", "RTX 3080 GPU", "Liquid Cooling"],
+    "offerPrice": 1399.99
   },
-  "taxIdentificationNumber": "TIN-987654381"
-}
+  {
+    "name": "UltraBook Pro 14",
+    "description": "Sleek and lightweight ultrabook with all-day battery life and a stunning Retina display.",
+    "price": 1299.99,
+    "stock": 40,
+    "weight": 1.2,
+    "availableColors": ["Silver", "Space Gray"],
+    "specification": {
+      "processor": "Apple M2",
+      "ram": "16GB Unified Memory",
+      "storage": "512GB SSD",
+      "display": "14-inch Liquid Retina XDR"
+    },
+    "keyFeatures": ["Long Battery Life", "Ultra-lightweight", "High-Resolution Display"],
+    "offerPrice": 1199.99
+  },
+  {
+    "name": "WorkStation Elite",
+    "description": "Powerful workstation for professionals, optimized for rendering and simulations.",
+    "price": 2499.99,
+    "stock": 15,
+    "weight": 3.8,
+    "availableColors": ["Black"],
+    "specification": {
+      "processor": "AMD Ryzen Threadripper 3970X",
+      "ram": "64GB DDR4",
+      "storage": "2TB NVMe SSD + 4TB HDD",
+      "display": "32-inch 4K UHD"
+    },
+    "keyFeatures": ["High Performance", "Multi-threading", "Large Storage Capacity"],
+    "offerPrice": 2399.99
+  },
+  {
+    "name": "Budget Laptop B5",
+    "description": "Affordable laptop for students and casual users with essential features.",
+    "price": 499.99,
+    "stock": 50,
+    "weight": 1.8,
+    "availableColors": ["Gray", "Blue"],
+    "specification": {
+      "processor": "Intel Core i3-1115G4",
+      "ram": "8GB DDR4",
+      "storage": "256GB SSD",
+      "display": "15.6-inch HD"
+    },
+    "keyFeatures": ["Affordable", "Lightweight", "Good Battery Life"],
+    "offerPrice": 449.99
+  },
+  {
+    "name": "Gaming Desktop Z7",
+    "description": "High-end gaming desktop with custom RGB lighting and overclocked performance.",
+    "price": 1999.99,
+    "stock": 20,
+    "weight": 8.0,
+    "availableColors": ["Black", "White"],
+    "specification": {
+      "processor": "Intel Core i7-13700K",
+      "ram": "32GB DDR5",
+      "storage": "2TB SSD",
+      "display": "None (Tower Only)"
+    },
+    "keyFeatures": ["Overclocked CPU", "Water Cooling", "High FPS Gaming"],
+    "offerPrice": 1899.99
+  },
+  {
+    "name": "Convertible Laptop C3",
+    "description": "2-in-1 convertible laptop with touchscreen and stylus support.",
+    "price": 899.99,
+    "stock": 30,
+    "weight": 1.4,
+    "availableColors": ["Gold", "Silver"],
+    "specification": {
+      "processor": "Intel Core i5-1235U",
+      "ram": "16GB DDR4",
+      "storage": "512GB SSD",
+      "display": "13.3-inch FHD Touchscreen"
+    },
+    "keyFeatures": ["Touchscreen", "2-in-1 Convertible", "Lightweight"],
+    "offerPrice": 849.99
+  },
+  {
+    "name": "Business Laptop B10",
+    "description": "Secure and reliable business laptop with advanced security features.",
+    "price": 1099.99,
+    "stock": 35,
+    "weight": 2.0,
+    "availableColors": ["Black", "Gray"],
+    "specification": {
+      "processor": "Intel Core i7-1260P",
+      "ram": "16GB DDR4",
+      "storage": "1TB SSD",
+      "display": "15.6-inch FHD"
+    },
+    "keyFeatures": ["Fingerprint Sensor", "TPM Security", "Long Battery Life"],
+    "offerPrice": 1049.99
+  },
+  {
+    "name": "Mini PC M1",
+    "description": "Compact mini PC with powerful performance for home and office use.",
+    "price": 799.99,
+    "stock": 25,
+    "weight": 1.0,
+    "availableColors": ["Black"],
+    "specification": {
+      "processor": "AMD Ryzen 7 5800U",
+      "ram": "16GB DDR4",
+      "storage": "512GB SSD",
+      "display": "None (Requires External Monitor)"
+    },
+    "keyFeatures": ["Compact Size", "Low Power Consumption", "High Performance"],
+    "offerPrice": 749.99
+  },
+  {
+    "name": "Chromebook Lite",
+    "description": "Lightweight Chromebook with fast boot-up and cloud-based storage.",
+    "price": 349.99,
+    "stock": 60,
+    "weight": 1.1,
+    "availableColors": ["White", "Silver"],
+    "specification": {
+      "processor": "Intel Celeron N4020",
+      "ram": "4GB LPDDR4",
+      "storage": "64GB eMMC",
+      "display": "11.6-inch HD"
+    },
+    "keyFeatures": ["Fast Boot-up", "Cloud Integration", "Affordable"],
+    "offerPrice": 299.99
+  },
+  {
+    "name": "Creator Laptop C7",
+    "description": "Premium laptop designed for content creators with 4K display and powerful GPU.",
+    "price": 2199.99,
+    "stock": 18,
+    "weight": 2.3,
+    "availableColors": ["Black", "Gray"],
+    "specification": {
+      "processor": "Intel Core i9-13900H",
+      "ram": "32GB DDR5",
+      "storage": "1TB SSD",
+      "display": "16-inch 4K OLED"
+    },
+    "keyFeatures": ["4K OLED Display", "RTX 4070 GPU", "High Color Accuracy"],
+    "offerPrice": 2099.99
+  }
+]

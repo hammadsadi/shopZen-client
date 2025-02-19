@@ -30,30 +30,36 @@ import SZImageUpload from "@/components/ui/core/SZImageUpload";
 import SHImagePreview from "@/components/ui/core/SZImageUpload/SHImagePreview";
 import { toast } from "sonner";
 import { LoaderCircle, PlusIcon } from "lucide-react";
-import { TCategory } from "@/types";
+import { TCategory, TProduct } from "@/types";
 import { getAllCategory } from "@/services/Category";
 import { getAllBrand } from "@/services/Brand";
 import { TBrand } from "@/types/brand.types";
-import { createProduct } from "@/services/Product";
+import { updateProduct } from "@/services/Product";
 import { useRouter } from "next/navigation";
-const AddProductPage = () => {
+const UpdateProductForm = ({product}:{product:TProduct}) => {
   const [imageFiels, setImageFiels] = useState<File[] | []>([]);
-  const [imagePreview, setImagePreview] = useState<string[] | []>([]);
+  const [imagePreview, setImagePreview] = useState<string[] | []>(product?.imageUrls || []);
   const [categoriesData, setCategoriesData] = useState<TCategory[] | []>([]);
   const [brandsData, setBrandsData] = useState<TBrand[] | []>([]);
   const router = useRouter();
   const form = useForm({
     defaultValues: {
-      name: "",
-      description: "",
-      price: "",
-      stock: "",
-      weight: "",
-      category: "",
-      brand: "",
-      availableColors: [{ value: "" }],
-      keyFeatures: [{ value: "" }],
-      specification: [{ key: "", value: "" }],
+      name: product?.name || "",
+      description: product?.description || "",
+      price: product?.price || "",
+      stock: product?.stock || "",
+      weight: product?.weight || "",
+      category: product?.category?._id || "",
+      brand: product?.brand?._id || "",
+      availableColors: product?.availableColors?.map((color) => ({
+        value: color,
+      })) || [{ value: "" }],
+      keyFeatures: product?.keyFeatures?.map((feature) => ({
+        value: feature,
+      })) || [{ value: "" }],
+      specification: Object.entries(product?.specification || {}).map(
+        ([key, value]) => ({ key, value })
+      ) || [{ key: "", value: "" }],
     },
   });
   const {
@@ -143,7 +149,7 @@ const AddProductPage = () => {
       for (const file of imageFiels) {
         formData.append("images", file);
       }
-      const res = await createProduct(formData);
+      const res = await updateProduct(formData, product?._id);
       // Toast Handle
       if (res?.success) {
         toast.success(res?.message);
@@ -162,7 +168,7 @@ const AddProductPage = () => {
           <div className="flex gap-2 border-b pb-3 mb-6">
             <ShopZenLogo />
             <div className="space-y-1">
-              <h2 className="font-bold text-lg md:text-2xl">Add Product</h2>
+              <h2 className="font-bold text-lg md:text-2xl">Update Product</h2>
             </div>
           </div>
           <Form {...form}>
@@ -432,7 +438,7 @@ const AddProductPage = () => {
                 {isSubmitting ? (
                   <LoaderCircle className="animate-spin" />
                 ) : (
-                  "Create"
+                  "Update"
                 )}
               </Button>
             </form>
@@ -443,4 +449,4 @@ const AddProductPage = () => {
   );
 };
 
-export default AddProductPage;
+export default UpdateProductForm;
