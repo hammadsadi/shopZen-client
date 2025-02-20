@@ -62,6 +62,7 @@ export const getAllProducts = async () => {
   }
 };
 
+
 // Get Single Product
 export const getSingleProduct = async (id: string) => {
   try {

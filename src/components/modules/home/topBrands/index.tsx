@@ -17,7 +17,7 @@ const TopBrandsSection = async () => {
             dLinkTitle="All Collection"
           />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {brands?.slice(0, 8)?.map((brand: TBrand, idx: number) => (
+            {brands?.slice(0, 4)?.map((brand: TBrand, idx: number) => (
               <div className="bg-white p-3 rounded-xl" key={idx}>
                 <div className="bg-gray-100 hover:bg-gray-300 p-2 rounded-xl h-20 w-full">
                   <Image
