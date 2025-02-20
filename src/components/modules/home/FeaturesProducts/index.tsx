@@ -8,7 +8,7 @@ import React from 'react'
 const FeaturesProducts = async() => {
   const {data:products} = await getAllProducts()
   return (
-    <div className="bg-white/10">
+    <div className="bg-white">
       <MySection>
         <div className="py-10 lg:py-[70px]">
           <SectionHeading
@@ -18,7 +18,8 @@ const FeaturesProducts = async() => {
           />
           <div className="grid xl:grid-cols-4 xl:gap-5 lg:grid-cols-3 lg:gap-3 md:grid-cols-2 md:gap-3 grid-cols-1 gap-2">
             {Array(5)
-              .fill(products?.[0]).map((product: TProduct, idx: number) => (
+              .fill(products?.[0])
+              .map((product: TProduct, idx: number) => (
                 <ProductCard key={idx} product={product} />
               ))}
           </div>
