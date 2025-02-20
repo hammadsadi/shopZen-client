@@ -10,7 +10,7 @@ const TopBrandsSection = async () => {
   return (
     <div className="">
       <MySection>
-        <div className="py-10 lg:py-[70px]">
+        <div className="">
           <SectionHeading
             sectionTitle="Top Brands"
             dLink="/all-products"

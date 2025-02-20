@@ -160,3 +160,75 @@
     "offerPrice": 2099.99
   }
 ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[
+  
+  {
+    "name": "Apple MacBook Pro 16",
+    "description": "The Apple MacBook Pro 16 is the ultimate powerhouse designed for professionals and creatives. It boasts an Apple M2 Pro chip for exceptional speed, a stunning 16-inch Retina display, and an impressive 32GB RAM for seamless multitasking. With a 1TB SSD, a premium aluminum chassis, and an unbeatable battery life, this laptop is a top choice for video editing, music production, and programming.",
+    "price": 24999,
+    "stock": 30,
+    "weight": 2.0,
+    "category": "6784da8ff8bb3af04cb26dcb",
+    "brand": "6784db1031af13750ec95ccc",
+    "availableColors": ["Space Gray", "Silver"],
+    "specification": {
+      "processor": "Apple M2 Pro",
+      "ram": "32GB",
+      "storage": "1TB SSD",
+      "display": "16 inch Retina"
+    },
+    "keyFeatures": ["M2 Pro chip", "Retina display", "Exceptional battery life"]
+  },
+  {
+    "name": "Asus ROG Zephyrus G14",
+    "description": "The Asus ROG Zephyrus G14 is a gaming beast packed in a compact 14-inch chassis. It features the powerful AMD Ryzen 9 processor, 32GB RAM, and a 1TB SSD for ultra-fast performance. The 165Hz QHD display delivers stunning visuals, making it perfect for gamers and content creators who demand top-tier performance in a portable form factor.",
+    "price": 189999,
+    "stock": 25,
+    "weight": 1.7,
+    "category": "6784da8ff8bb3af04cb26dcb",
+    "brand": "6784db1031af13750ec95ddd",
+    "availableColors": ["White", "Black"],
+    "specification": {
+      "processor": "AMD Ryzen 9",
+      "ram": "32GB",
+      "storage": "1TB SSD",
+      "display": "14 inch QHD 165Hz"
+    },
+    "keyFeatures": ["165Hz refresh rate", "Ryzen 9 processor", "Gaming-grade performance"]
+  },
+  {
+    "name": "Dell XPS 17",
+    "description": "The Dell XPS 17 is a high-performance laptop built for professionals and creatives. With a massive 17-inch UHD+ display, Intel Core i9 processor, and NVIDIA RTX 4070 graphics, it delivers exceptional speed and power. This laptop is perfect for video editing, 3D modeling, and high-end productivity tasks, packed into a slim and stylish design.",
+    "price": 279999,
+    "stock": 20,
+    "weight": 2.5,
+    "category": "6784da8ff8bb3af04cb26dcb",
+    "brand": "6784db1031af13750ec95eee",
+    "availableColors": ["Platinum", "Black"],
+    "specification": {
+      "processor": "Intel Core i9",
+      "ram": "32GB",
+      "storage": "2TB SSD",
+      "display": "17 inch UHD+"
+    },
+    "keyFeatures": ["4K UHD+ display", "RTX 4070 graphics", "Powerful Core i9 processor"]
+  }
+]

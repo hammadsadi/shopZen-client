@@ -6,10 +6,13 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { SZTable } from "@/components/ui/core/SZTable";
 import { TProduct } from "@/types";
+import { Checkbox } from "@/components/ui/checkbox";
+import { useState } from "react";
+import FlashSaleModal from "./FlashSaleModal";
 
 const ManageProducts = ({ products }: { products: TProduct[] }) => {
+  const [productIds, setProductIds] = useState<string[]>([]);
   const router = useRouter();
-
   const handleView = (product: TProduct) => {
     console.log("Viewing product:", product);
   };
@@ -19,6 +22,37 @@ const ManageProducts = ({ products }: { products: TProduct[] }) => {
   };
 
   const columns: ColumnDef<TProduct>[] = [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => {
+            if (value) {
+              setProductIds((prev) => [...prev, row.original._id]);
+            } else {
+              setProductIds(
+                productIds?.filter((id) => id !== row.original._id)
+              );
+            }
+            row.toggleSelected(!!value);
+          }}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
     {
       accessorKey: "name",
       header: "Product Name",
@@ -112,6 +146,10 @@ const ManageProducts = ({ products }: { products: TProduct[] }) => {
           >
             Add Product <Plus />
           </Button>
+          <FlashSaleModal
+            productsIds={productIds}
+            setProductIds={setProductIds}
+          />
         </div>
       </div>
       <SZTable columns={columns} data={products || []} />
