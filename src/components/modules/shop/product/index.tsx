@@ -5,13 +5,19 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { SZTable } from "@/components/ui/core/SZTable";
-import { TProduct } from "@/types";
+import { TMeta, TProduct } from "@/types";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useState } from "react";
 import FlashSaleModal from "./FlashSaleModal";
 import TablePagination from "@/components/ui/core/SZTable/TablePagination";
 
-const ManageProducts = ({ products }: { products: TProduct[] }) => {
+const ManageProducts = ({
+  products,
+  meta,
+}: {
+  products: TProduct[];
+  meta: TMeta;
+}) => {
   const [productIds, setProductIds] = useState<string[]>([]);
   const router = useRouter();
   const handleView = (product: TProduct) => {
@@ -154,7 +160,7 @@ const ManageProducts = ({ products }: { products: TProduct[] }) => {
         </div>
       </div>
       <SZTable columns={columns} data={products || []} />
-      <TablePagination />
+      <TablePagination totalPage={meta?.totalPage} />
     </div>
   );
 };

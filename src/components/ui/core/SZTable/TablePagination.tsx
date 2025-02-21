@@ -1,22 +1,26 @@
 import { ArrowLeft, ArrowRight } from "lucide-react"
 import { Button } from "../../button"
 import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 
-const TablePagination = () => {
+const TablePagination = ({ totalPage }: { totalPage: number }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const pageNo = 10;
+  const router = useRouter();
+  const pathname = usePathname();
 
   // Handle Previous
   const handlePrevious = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
+      router.push(`${pathname}?page=${currentPage - 1}`);
     }
   };
 
   // Handle Next
   const handleNext = () => {
-    if (currentPage < pageNo) {
+    if (currentPage < totalPage) {
       setCurrentPage(currentPage + 1);
+      router.push(`${pathname}?page=${currentPage + 1}`);
     }
   };
   return (
@@ -29,9 +33,12 @@ const TablePagination = () => {
       >
         <ArrowLeft />
       </Button>
-      {[...Array(pageNo)].map((_, index) => (
+      {[...Array(totalPage)].map((_, index) => (
         <Button
-          onClick={() => setCurrentPage(index + 1)}
+          onClick={() => {
+            setCurrentPage(index + 1);
+            router.push(`${pathname}?page=${index + 1}`);
+          }}
           key={index}
           className="w-8 h-8 rounded-full"
           variant={`${currentPage === index + 1 ? "default" : "outline"}`}
@@ -40,7 +47,7 @@ const TablePagination = () => {
         </Button>
       ))}
       <Button
-        disabled={currentPage === pageNo}
+        disabled={currentPage === totalPage}
         onClick={handleNext}
         className="w-8 h-8 rounded-full"
         variant="outline"
@@ -49,6 +56,6 @@ const TablePagination = () => {
       </Button>
     </div>
   );
-}
+};
 
 export default TablePagination

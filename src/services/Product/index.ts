@@ -44,17 +44,20 @@ export const updateProduct = async (
 };
 
 // Get All Product
-export const getAllProducts = async () => {
+export const getAllProducts = async (page?: string) => {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/product`, {
-      method: "GET",
-      headers: {
-        Authorization: (await cookies()).get("accessToken")?.value as string,
-      },
-      next: {
-        tags: ["PRODUCT"],
-      },
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_API}/product?page=${page}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: (await cookies()).get("accessToken")?.value as string,
+        },
+        next: {
+          tags: ["PRODUCT"],
+        },
+      }
+    );
 
     return res.json();
   } catch (error: any) {
