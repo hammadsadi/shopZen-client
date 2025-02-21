@@ -9,6 +9,7 @@ import { TProduct } from "@/types";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useState } from "react";
 import FlashSaleModal from "./FlashSaleModal";
+import TablePagination from "@/components/ui/core/SZTable/TablePagination";
 
 const ManageProducts = ({ products }: { products: TProduct[] }) => {
   const [productIds, setProductIds] = useState<string[]>([]);
@@ -153,6 +154,7 @@ const ManageProducts = ({ products }: { products: TProduct[] }) => {
         </div>
       </div>
       <SZTable columns={columns} data={products || []} />
+      <TablePagination />
     </div>
   );
 };
