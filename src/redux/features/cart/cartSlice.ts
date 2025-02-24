@@ -9,10 +9,14 @@ export interface ICartInterface extends TProduct {
 
 interface IInitialState {
   products: ICartInterface[];
+  city: string;
+  shippingAddress: string;
 }
 
 const initialState: IInitialState = {
   products: [],
+  city: "",
+  shippingAddress: "",
 };
 const cartSlice = createSlice({
   name: "cart",
@@ -47,15 +51,33 @@ const cartSlice = createSlice({
         productFind.productQuantity -= 1;
       }
     },
+
+    // City Update
+    updateCity: (state, action) => {
+      state.city = action.payload;
+    },
+    // Shipping Address Update
+    updateShippingAddress: (state, action) => {
+      state.shippingAddress = action.payload;
+    },
   },
 });
 
 // Actions
-export const { addToCart, increamentCartItem, decreamentCartItem } =
-  cartSlice.actions;
+export const {
+  addToCart,
+  increamentCartItem,
+  decreamentCartItem,
+  updateCity,
+  updateShippingAddress,
+} = cartSlice.actions;
+
+
+  // Selectors
 export const orderedProductSelector = (state: RootState) => {
   return state.cart.products;
 };
+// Subtotal Selector
 export const subTotalSelectTor = (state: RootState) => {
   return state.cart.products.reduce((acc, product) => {
     if (product.offerPrice) {
@@ -65,4 +87,48 @@ export const subTotalSelectTor = (state: RootState) => {
     }
   }, 0);
 };
+
+// Shipping address Selector
+export const shippingAddressSelector = (state: RootState) => {
+  return state.cart.shippingAddress;
+};
+
+// City Selector
+export const citySelector = (state: RootState) => {
+  return state.cart.city;
+};
+
+
+// Order Selector
+export const orderSelector = (state:RootState) =>{
+  return {
+    product: state.cart?.products.map((product) => ({
+      product: product._id,
+      quantity: product.productQuantity,
+    })),
+    shippingAddress: `${state.cart.shippingAddress} - ${state.cart.city}`,
+    paymentMethod: "Online"
+  }
+}
+
+// Shipping Cost Selector
+export const shippingCostSelector = (state: RootState) => {
+  if (
+    state.cart.city &&
+    state.cart.city === "Dhaka" &&
+    state.cart.products.length > 0
+  ) {
+    return 60;
+  } else if (
+    state.cart.city &&
+    state.cart.city !== "Dhaka" &&
+    state.cart.products.length > 0
+  ) {
+    return 120;
+  } else {
+    return 0;
+  }
+};
+
+// Export Reducer
 export default cartSlice.reducer;
