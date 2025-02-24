@@ -3,22 +3,43 @@
 import { Button } from "@/components/ui/button";
 import { currencyFormatter } from "@/lib/currencyFormatter";
 import {
+  citySelector,
   grandTotalSelector,
+  orderedProductSelector,
   orderSelector,
+  shippingAddressSelector,
   shippingCostSelector,
   subTotalSelectTor,
 } from "@/redux/features/cart/cartSlice";
 import { useAppSelector } from "@/redux/hooks";
+import { toast } from "sonner";
 
 export default function PaymentDetails() {
   const subTotal = useAppSelector(subTotalSelectTor);
   const shppingCost = useAppSelector(shippingCostSelector);
   const orderProducts = useAppSelector(orderSelector);
   const grandTotal = useAppSelector(grandTotalSelector);
-
+  const cityName = useAppSelector(citySelector);
+  const shippingAddress = useAppSelector(shippingAddressSelector);
+  const orderedProducts = useAppSelector(orderedProductSelector);
   // Handle Order Now
   const handleOrderNow = () => {
-    console.log(orderProducts);
+    const orderLoading = toast.loading("Order Being Placed");
+    try {
+      if (!cityName) {
+        throw new Error("City is Missing");
+      }
+      if (!shippingAddress) {
+        throw new Error("Shipping Address is Missing");
+      }
+      if (orderedProducts.length === 0) {
+        throw new Error("Cart is Empty. What are you trying to Order?");
+      }
+      toast.success("Order Placed Successfully", { id: orderLoading });
+      console.log(orderProducts);
+    } catch (error: any) {
+      toast.error(error.message, { id: orderLoading });
+    }
   };
   return (
     <div className=" border bg-white rounded-md col-span-4 h-fit p-5">

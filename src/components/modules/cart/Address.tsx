@@ -10,17 +10,13 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { cities } from "@/constants/cities";
 import {
-  citySelector,
-  shippingAddressSelector,
   updateCity,
   updateShippingAddress,
 } from "@/redux/features/cart/cartSlice";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { useAppDispatch } from "@/redux/hooks";
 
 export default function Address() {
   const dispatch = useAppDispatch();
-  const cityName = useAppSelector(citySelector);
-  const shippingAddress = useAppSelector(shippingAddressSelector);
 
   // Handle City Change
   const handleCityChange = (city: string) => {
