@@ -1,7 +1,9 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { currencyFormatter } from "@/lib/currencyFormatter";
 import {
+  grandTotalSelector,
   orderSelector,
   shippingCostSelector,
   subTotalSelectTor,
@@ -12,6 +14,7 @@ export default function PaymentDetails() {
   const subTotal = useAppSelector(subTotalSelectTor);
   const shppingCost = useAppSelector(shippingCostSelector);
   const orderProducts = useAppSelector(orderSelector);
+  const grandTotal = useAppSelector(grandTotalSelector);
 
   // Handle Order Now
   const handleOrderNow = () => {
@@ -23,7 +26,7 @@ export default function PaymentDetails() {
       <div className="space-y-2 mt-4">
         <div className="flex justify-between">
           <p className="text-gray-500 ">Subtotal</p>
-          <p className="font-semibold">{subTotal}</p>
+          <p className="font-semibold">{currencyFormatter(subTotal)}</p>
         </div>
         <div className="flex justify-between">
           <p className="text-gray-500 ">Discount</p>
@@ -31,12 +34,12 @@ export default function PaymentDetails() {
         </div>
         <div className="flex justify-between">
           <p className="text-gray-500 ">Shipment Cost</p>
-          <p className="font-semibold">{shppingCost}</p>
+          <p className="font-semibold">{currencyFormatter(shppingCost)}</p>
         </div>
       </div>
       <div className="flex justify-between mt-10 mb-5">
         <p className="text-gray-500 ">Grand Total</p>
-        <p className="font-semibold">98</p>
+        <p className="font-semibold">{currencyFormatter(grandTotal)}</p>
       </div>
       <Button
         onClick={handleOrderNow}

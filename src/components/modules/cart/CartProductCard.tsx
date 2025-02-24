@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { currencyFormatter } from "@/lib/currencyFormatter";
 import {
   decreamentCartItem,
   ICartInterface,
@@ -50,8 +51,10 @@ export default function CartProductCard({
         <hr className="my-1" />
         <div className="flex items-center justify-between">
           <h2>
-            Price:
-            {product.offerPrice ? product.offerPrice : product.price}
+            Price: &nbsp;
+            {product.offerPrice
+              ? currencyFormatter(product.offerPrice)
+              : currencyFormatter(product.price)}
           </h2>
           <div className="flex items-center gap-2">
             <p className="text-gray-500 font-semibold">Quantity</p>

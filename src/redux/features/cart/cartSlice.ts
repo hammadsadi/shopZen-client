@@ -130,5 +130,14 @@ export const shippingCostSelector = (state: RootState) => {
   }
 };
 
+
+// Grand Total Selector
+export const grandTotalSelector = (state:RootState) =>{
+  const subTotal = subTotalSelectTor(state);
+  const shippingCost = shippingCostSelector(state);
+  return subTotal + shippingCost;
+}
+
+
 // Export Reducer
 export default cartSlice.reducer;
