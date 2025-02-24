@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { useUser } from "@/context/UserContext";
 import { currencyFormatter } from "@/lib/currencyFormatter";
 import {
   citySelector,
@@ -12,20 +13,28 @@ import {
   subTotalSelectTor,
 } from "@/redux/features/cart/cartSlice";
 import { useAppSelector } from "@/redux/hooks";
+import { createUserOrder } from "@/services/Cart";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 export default function PaymentDetails() {
   const subTotal = useAppSelector(subTotalSelectTor);
   const shppingCost = useAppSelector(shippingCostSelector);
-  const orderProducts = useAppSelector(orderSelector);
+  const orders = useAppSelector(orderSelector);
   const grandTotal = useAppSelector(grandTotalSelector);
   const cityName = useAppSelector(citySelector);
   const shippingAddress = useAppSelector(shippingAddressSelector);
   const orderedProducts = useAppSelector(orderedProductSelector);
+  const { user } = useUser();
+  const router = useRouter();
   // Handle Order Now
-  const handleOrderNow = () => {
+  const handleOrderNow = async () => {
     const orderLoading = toast.loading("Order Being Placed");
     try {
+      if (!user) {
+        router.push("/login");
+        throw new Error("User is not Logged In");
+      }
       if (!cityName) {
         throw new Error("City is Missing");
       }
@@ -35,8 +44,9 @@ export default function PaymentDetails() {
       if (orderedProducts.length === 0) {
         throw new Error("Cart is Empty. What are you trying to Order?");
       }
+      const res = await createUserOrder(orders);
       toast.success("Order Placed Successfully", { id: orderLoading });
-      console.log(orderProducts);
+      console.log(res);
     } catch (error: any) {
       toast.error(error.message, { id: orderLoading });
     }

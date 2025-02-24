@@ -102,13 +102,14 @@ export const citySelector = (state: RootState) => {
 // Order Selector
 export const orderSelector = (state:RootState) =>{
   return {
-    product: state.cart?.products.map((product) => ({
+    products: state.cart?.products.map((product) => ({
       product: product._id,
       quantity: product.productQuantity,
+      color: "White",
     })),
     shippingAddress: `${state.cart.shippingAddress} - ${state.cart.city}`,
-    paymentMethod: "Online"
-  }
+    paymentMethod: "Online",
+  };
 }
 
 // Shipping Cost Selector
