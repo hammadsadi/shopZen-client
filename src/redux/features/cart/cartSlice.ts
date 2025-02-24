@@ -50,9 +50,19 @@ const cartSlice = createSlice({
   },
 });
 
+// Actions
 export const { addToCart, increamentCartItem, decreamentCartItem } =
   cartSlice.actions;
 export const orderedProductSelector = (state: RootState) => {
   return state.cart.products;
+};
+export const subTotalSelectTor = (state: RootState) => {
+  return state.cart.products.reduce((acc, product) => {
+    if (product.offerPrice) {
+      return acc + product.offerPrice * product.productQuantity;
+    } else {
+      return acc + product.price * product.productQuantity;
+    }
+  }, 0);
 };
 export default cartSlice.reducer;
