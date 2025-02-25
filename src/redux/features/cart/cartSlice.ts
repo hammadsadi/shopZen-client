@@ -60,6 +60,13 @@ const cartSlice = createSlice({
     updateShippingAddress: (state, action) => {
       state.shippingAddress = action.payload;
     },
+
+    // Clear Cart Item
+    clearCartItems: (state) => {
+      state.products = [];
+      state.city = "";
+      state.shippingAddress = "";
+    },
   },
 });
 
@@ -70,6 +77,7 @@ export const {
   decreamentCartItem,
   updateCity,
   updateShippingAddress,
+  clearCartItems,
 } = cartSlice.actions;
 
 
