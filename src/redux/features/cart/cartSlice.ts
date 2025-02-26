@@ -1,7 +1,7 @@
 import { RootState } from "@/redux/store";
-import { TProduct } from "@/types";
-import { createSlice } from "@reduxjs/toolkit";
-
+import { addDiscountCoupon } from "@/services/Cart";
+import { TDiscount, TProduct } from "@/types";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export interface ICartInterface extends TProduct {
   productQuantity: number;
@@ -11,19 +11,37 @@ interface IInitialState {
   products: ICartInterface[];
   city: string;
   shippingAddress: string;
+  shopId: string;
 }
 
 const initialState: IInitialState = {
   products: [],
   city: "",
   shippingAddress: "",
+  shopId: "",
 };
+
+// Async Thunk
+export const fetchCoupon = createAsyncThunk(
+  "cart/fetchCoupon",
+  async (couponData: TDiscount) => {
+    try {
+      const res = await addDiscountCoupon(couponData);
+      return res;
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+);
 const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
     // Add To Cart
     addToCart: (state, action) => {
+      if (state.products.length === 0) {
+        state.shopId = action.payload.shop._id;
+      }
       const isExistProduct = state.products.find(
         (product) => product._id === action.payload._id
       );
@@ -68,6 +86,11 @@ const cartSlice = createSlice({
       state.shippingAddress = "";
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(fetchCoupon.pending, (state, action) => {});
+    builder.addCase(fetchCoupon.rejected, (state, action) => {});
+    builder.addCase(fetchCoupon.fulfilled, (state, action) => {});
+  },
 });
 
 // Actions
@@ -80,8 +103,7 @@ export const {
   clearCartItems,
 } = cartSlice.actions;
 
-
-  // Selectors
+// Selectors
 export const orderedProductSelector = (state: RootState) => {
   return state.cart.products;
 };
@@ -94,6 +116,11 @@ export const subTotalSelectTor = (state: RootState) => {
       return acc + product.price * product.productQuantity;
     }
   }, 0);
+};
+
+// Shop Selector
+export const shopSelector = (state: RootState) => {
+  return state.cart.shopId;
 };
 
 // Shipping address Selector

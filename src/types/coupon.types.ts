@@ -8,3 +8,9 @@ export type TCoupon = {
   startDate: string;
   endDate: string;
 };
+
+export type TDiscount = {
+  shopId: string;
+  couponCode: string;
+  subTotal: number;
+};

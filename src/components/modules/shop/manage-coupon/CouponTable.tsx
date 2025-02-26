@@ -1,14 +1,12 @@
 "use client";
 
-import { Checkbox } from "@/components/ui/checkbox";
 import { SZTable } from "@/components/ui/core/SZTable";
 import TablePagination from "@/components/ui/core/SZTable/TablePagination";
-import { TMeta, TProduct } from "@/types";
+import { TCoupon, TMeta, TProduct } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
-import { Edit, Eye, Trash } from "lucide-react";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { Trash } from "lucide-react";
+// import { useRouter } from "next/navigation";
+// import { useState } from "react";
 
 const CouponTable = ({
   coupons,
@@ -17,112 +15,58 @@ const CouponTable = ({
   coupons: TProduct[];
   meta: TMeta;
 }) => {
-  const [selectedProductsId, setSelectedProductsId] = useState<string[]>([]);
+  // const [selectedProductsId, setSelectedProductsId] = useState<string[]>([]);
 
-  const router = useRouter();
+  // const router = useRouter();
 
-  const handleView = (product: TProduct) => {
-    console.log("Viewing product:", product);
-  };
+  // const handleView = (product: TProduct) => {
+  //   console.log("Viewing product:", product);
+  // };
 
-  const handleDelete = (productId: string) => {
-    console.log("Deleting product with ID:", productId);
-  };
+  // const handleDelete = (productId: string) => {
+  //   console.log("Deleting product with ID:", productId);
+  // };
 
-  const columns: ColumnDef<TProduct>[] = [
+  const columns: ColumnDef<TCoupon>[] = [
     {
-      id: "select",
-      header: ({ table }) => (
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
-          onCheckedChange={(value) => {
-            table.toggleAllPageRowsSelected(!!value);
-          }}
-          aria-label="Select all"
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => {
-            if (value) {
-              setSelectedProductsId([...selectedProductsId, row.original._id]);
-            } else {
-              setSelectedProductsId(
-                selectedProductsId.filter((id) => id !== row.original._id)
-              );
-            }
-
-            row.toggleSelected(!!value);
-          }}
-          aria-label="Select row"
-        />
-      ),
-      enableSorting: false,
-      enableHiding: false,
+      accessorKey: "code",
+      header: "Code",
+      cell: ({ row }) => <span>{row.original?.code}</span>,
     },
     {
-      accessorKey: "name",
-      header: "Product Name",
-      cell: ({ row }) => (
-        <div className="flex items-center space-x-3">
-          <Image
-            src={row.original.imageUrls[0]}
-            alt={row.original.name}
-            width={40}
-            height={40}
-            className="w-8 h-8 rounded-full"
-          />
-          <span className="truncate">{row.original.name}</span>
-        </div>
-      ),
+      accessorKey: "discountType",
+      header: "Discount Type",
+      cell: ({ row }) => <span>{row.original.discountType}</span>,
     },
     {
-      accessorKey: "category",
-      header: "Category",
-      cell: ({ row }) => <span>{row.original.category.name}</span>,
+      accessorKey: "discountValue",
+      header: "Discount Value",
+      cell: ({ row }) => <span>{row.original.discountValue}</span>,
     },
     {
-      accessorKey: "brand",
-      header: "Brand",
-      cell: ({ row }) => <span>{row.original.brand.name}</span>,
+      accessorKey: "minOrderAmount",
+      header: "Min Order Amount",
+      cell: ({ row }) => <span>$ {row.original.minOrderAmount}</span>,
     },
     {
-      accessorKey: "stock",
-      header: "Stock",
-      cell: ({ row }) => <span>{row.original.stock}</span>,
-    },
-    {
-      accessorKey: "price",
-      header: "Price",
-      cell: ({ row }) => <span>$ {row.original.price.toFixed(2)}</span>,
-    },
-    {
-      accessorKey: "offerPrice",
-      header: "Ofter Price",
-      cell: ({ row }) => (
-        <span>
-          $ {row.original.offerPrice ? row.original.offerPrice.toFixed(2) : "0"}
-        </span>
-      ),
+      accessorKey: "maxDiscountAmount",
+      header: "Max Discount Amount",
+      cell: ({ row }) => <span>$ {row.original.maxDiscountAmount}</span>,
     },
     {
       accessorKey: "action",
       header: "Action",
       cell: ({ row }) => (
         <div className="flex items-center space-x-3">
-          <button
+          {/* <button
             className="text-gray-500 hover:text-blue-500"
             title="View"
-            onClick={() => handleView(row.original)}
+            onClick={() => handleView(row.)}
           >
             <Eye className="w-5 h-5" />
-          </button>
+          </button> */}
 
-          <button
+          {/* <button
             className="text-gray-500 hover:text-green-500"
             title="Edit"
             onClick={() =>
@@ -130,12 +74,12 @@ const CouponTable = ({
             }
           >
             <Edit className="w-5 h-5" />
-          </button>
+          </button> */}
 
           <button
             className="text-gray-500 hover:text-red-500"
             title="Delete"
-            onClick={() => handleDelete(row.original._id)}
+            // onClick={() => handleDelete(row.original._id)}
           >
             <Trash className="w-5 h-5" />
           </button>
@@ -147,9 +91,7 @@ const CouponTable = ({
   return (
     <div className="my-5">
       <SZTable columns={columns} data={coupons || []} />
-      <TablePagination
-        totalPage={meta?.totalPage}
-      />
+      <TablePagination totalPage={meta?.totalPage} />
     </div>
   );
 };

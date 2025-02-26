@@ -11,6 +11,7 @@ export const createCoupon = async (data: TCoupon) => {
       method: "POST",
       headers: {
         Authorization: (await cookies()).get("accessToken")?.value as string,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     });

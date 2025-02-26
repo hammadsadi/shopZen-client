@@ -34,34 +34,39 @@ import {
 } from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar";
 import { createCoupon } from "@/services/Coupon";
+import { toast } from "sonner";
 
 export default function CreateCouponModal() {
   const form = useForm();
   const startDate = form.watch("startDate");
   const discountType = form.watch("discountType");
 
-const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-  const couponData = {
-    code: data.code,
-    discountType: data.discountType,
-    discountValue: Number(data?.discountValue),
-    minOrderAmount: Number(data?.minOrderAmount),
-    maxDiscountAmount: Number(data?.maxDiscountAmount),
-    startDate: formatISO(data.startDate),
-    endDate: formatISO(data.endDate),
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    const couponId = toast.loading("createCoupon");
+    const couponData = {
+      code: data?.code,
+      discountType: data?.discountType,
+      discountValue: Number(data?.discountValue),
+      minOrderAmount: Number(data?.minOrderAmount),
+      maxDiscountAmount: Number(data?.maxDiscountAmount),
+      startDate: formatISO(data?.startDate),
+      endDate: formatISO(data?.endDate),
+    };
+
+    try {
+      const res = await createCoupon(couponData);
+      if (res?.success) {
+        toast.success(res?.message, { id: couponId });
+        form.reset();
+      } else {
+        toast.error(res?.message, { id: couponId });
+      }
+    } catch (error: any) {
+      toast.error(error?.message, { id: couponId });
+    }
+
+    //   form.reset();
   };
-
-  try {
-    const res = await createCoupon(couponData);
-    console.log(res)
-  } catch (error) {
-    console.log(error);
-  }
-
-  console.log(couponData);
-
-//   form.reset();
-};
 
   return (
     <Dialog>
