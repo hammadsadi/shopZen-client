@@ -12,6 +12,12 @@ interface IInitialState {
   city: string;
   shippingAddress: string;
   shopId: string;
+  coupon: {
+    code: string;
+    discountAmount: number;
+    isLoading: boolean;
+    error: string;
+  };
 }
 
 const initialState: IInitialState = {
@@ -19,6 +25,12 @@ const initialState: IInitialState = {
   city: "",
   shippingAddress: "",
   shopId: "",
+  coupon: {
+    code: "",
+    discountAmount: 0,
+    isLoading: false,
+    error: "",
+  },
 };
 
 // Async Thunk
@@ -27,6 +39,9 @@ export const fetchCoupon = createAsyncThunk(
   async (couponData: TDiscount) => {
     try {
       const res = await addDiscountCoupon(couponData);
+      if (!res.success) {
+        throw new Error(res.message);
+      }
       return res;
     } catch (error: any) {
       throw new Error(error.message);
@@ -87,9 +102,22 @@ const cartSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchCoupon.pending, (state, action) => {});
-    builder.addCase(fetchCoupon.rejected, (state, action) => {});
-    builder.addCase(fetchCoupon.fulfilled, (state, action) => {});
+    builder.addCase(fetchCoupon.pending, (state) => {
+      state.coupon.isLoading = true;
+      state.coupon.error = "";
+    });
+    builder.addCase(fetchCoupon.rejected, (state, action) => {
+      state.coupon.isLoading = false;
+      state.coupon.error = action.error.message as string;
+      state.coupon.code = "";
+      state.coupon.discountAmount = 0;
+    });
+    builder.addCase(fetchCoupon.fulfilled, (state, action) => {
+      state.coupon.isLoading = false;
+      state.coupon.error = "";
+      state.coupon.code = action.payload.data.coupon.code;
+      state.coupon.discountAmount = action.payload.data.coupon.discountAmount;
+    });
   },
 });
 
@@ -133,6 +161,10 @@ export const citySelector = (state: RootState) => {
   return state.cart.city;
 };
 
+// Discount Selector
+export const discountSelector = (state: RootState) => {
+  return state.cart.coupon;
+};
 
 // Order Selector
 export const orderSelector = (state:RootState) =>{
