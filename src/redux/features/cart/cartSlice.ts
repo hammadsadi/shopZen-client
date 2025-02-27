@@ -116,7 +116,7 @@ const cartSlice = createSlice({
       state.coupon.isLoading = false;
       state.coupon.error = "";
       state.coupon.code = action.payload.data.coupon.code;
-      state.coupon.discountAmount = action.payload.data.coupon.discountAmount;
+      state.coupon.discountAmount = action.payload.data.discountAmount;
     });
   },
 });
@@ -166,8 +166,13 @@ export const discountSelector = (state: RootState) => {
   return state.cart.coupon;
 };
 
+// Discount Amount Selector
+export const discountAmountSelector = (state: RootState) => {
+  return state.cart.coupon.discountAmount;
+};
+
 // Order Selector
-export const orderSelector = (state:RootState) =>{
+export const orderSelector = (state: RootState) => {
   return {
     products: state.cart?.products.map((product) => ({
       product: product._id,
@@ -177,7 +182,7 @@ export const orderSelector = (state:RootState) =>{
     shippingAddress: `${state.cart.shippingAddress} - ${state.cart.city}`,
     paymentMethod: "Online",
   };
-}
+};
 
 // Shipping Cost Selector
 export const shippingCostSelector = (state: RootState) => {
@@ -198,13 +203,13 @@ export const shippingCostSelector = (state: RootState) => {
   }
 };
 
-
 // Grand Total Selector
-export const grandTotalSelector = (state:RootState) =>{
+export const grandTotalSelector = (state: RootState) => {
   const subTotal = subTotalSelectTor(state);
   const shippingCost = shippingCostSelector(state);
-  return subTotal + shippingCost;
-}
+  const discountAmount = discountAmountSelector(state);
+  return subTotal - discountAmount + shippingCost;
+};
 
 
 // Export Reducer

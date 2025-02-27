@@ -17,7 +17,7 @@ import {
 export default function Coupon() {
   const dispatch = useAppDispatch();
   const subTotal = useAppSelector(subTotalSelectTor);
-  const { isLoading } = useAppSelector(discountSelector);
+  const { isLoading, code } = useAppSelector(discountSelector);
   const shopId = useAppSelector(shopSelector);
   const form = useForm();
 
@@ -60,7 +60,7 @@ export default function Coupon() {
                       {...field}
                       className="rounded-full"
                       placeholder="Promo / Coupon code"
-                      value={field.value}
+                      value={field.value || code}
                     />
                   </FormControl>
                 </FormItem>

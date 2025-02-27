@@ -6,6 +6,8 @@ import { currencyFormatter } from "@/lib/currencyFormatter";
 import {
   citySelector,
   clearCartItems,
+  discountAmountSelector,
+  discountSelector,
   grandTotalSelector,
   orderedProductSelector,
   orderSelector,
@@ -23,9 +25,11 @@ export default function PaymentDetails() {
   const shppingCost = useAppSelector(shippingCostSelector);
   const orders = useAppSelector(orderSelector);
   const grandTotal = useAppSelector(grandTotalSelector);
+  const discountAmount = useAppSelector(discountAmountSelector);
   const cityName = useAppSelector(citySelector);
   const shippingAddress = useAppSelector(shippingAddressSelector);
   const orderedProducts = useAppSelector(orderedProductSelector);
+  const coupon = useAppSelector(discountSelector);
   const { user } = useUser();
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -46,7 +50,13 @@ export default function PaymentDetails() {
       if (orderedProducts.length === 0) {
         throw new Error("Cart is Empty. What are you trying to Order?");
       }
-      const res = await createUserOrder(orders);
+      let orderData;
+      if (coupon.code) {
+        orderData = { ...orders, coupon: coupon.code };
+      } else {
+        orderData = orders;
+      }
+      const res = await createUserOrder(orderData);
       if (res?.success) {
         toast.success(res.message, { id: orderLoading });
         dispatch(clearCartItems());
@@ -70,7 +80,7 @@ export default function PaymentDetails() {
         </div>
         <div className="flex justify-between">
           <p className="text-gray-500 ">Discount</p>
-          <p className="font-semibold">99</p>
+          <p className="font-semibold">{currencyFormatter(discountAmount)}</p>
         </div>
         <div className="flex justify-between">
           <p className="text-gray-500 ">Shipment Cost</p>
