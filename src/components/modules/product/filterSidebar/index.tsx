@@ -1,161 +1,145 @@
 "use client";
-
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Slider } from "@/components/ui/slider";
-import { Card, CardContent } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { Star } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Filter, X } from "lucide-react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { getAllCategory } from "@/services/Category";
+import { getAllBrand } from "@/services/Brand";
 
-const FilterSidebar = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [price, setPrice] = useState(50);
+export default function FilterSidebar() {
+  const [price, setPrice] = useState([0]);
 
-  const productTypes = [
-    "Laptop & Accessories",
-    "Computers Pc",
-    "Speakers & Headset",
-    "Keyboards & Mouse",
-    "Camera",
-    "Video Recording",
-    "Tablet",
-    "Table Lights",
-  ];
+  const [isLoading, setIsLoading] = useState(false);
 
-  const brands = ["HP", "Apple", "Dell", "Asus", "Canon"];
-  const ratings = [5, 4, 3, 2, 1];
-  const availability = ["In Stock", "Pre Order", "Upcoming"];
+  const [categories, setCategories] = useState([]);
+  const [brands, setBrands] = useState([]);
 
-  // Close sidebar when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const sidebar = document.getElementById("filter-sidebar");
-      if (sidebar && !sidebar.contains(event.target as Node)) {
-        setIsSidebarOpen(false);
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const [{ data: categoriesData }, { data: brandsData }] =
+          await Promise.all([getAllCategory(), getAllBrand()]);
+        setCategories(categoriesData);
+        setBrands(brandsData);
+      } catch (error: any) {
+        console.error(error);
+        toast.error("Failed to fetch filters");
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    if (isSidebarOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
+    fetchData();
+  }, []);
 
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isSidebarOpen]);
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  // Handle Search Query
+  const handleSearchQuery = (query: string, value: string | number) => {
+    router.push(`${pathname}?${query}=${value.toString()}`, { scroll: false });
+  };
 
   return (
-    <div className="relative">
-      {/* Filter Button for Mobile */}
-      <Button
-        variant="outline"
-        className="lg:hidden flex items-center gap-2"
-        onClick={() => setIsSidebarOpen(true)}
-      >
-        <Filter size={20} />
-        Filters
-      </Button>
-
-      {/* Sidebar Overlay for Mobile */}
-      {isSidebarOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden" />
-      )}
-
-      {/* Sidebar */}
-      <Card
-        id="filter-sidebar"
-        className={`fixed lg:static top-0 left-0 h-full lg:h-auto bg-white z-50 lg:z-auto shadow-md p-4 w-72 transition-transform duration-300 
-          ${
-            isSidebarOpen
-              ? "translate-x-0"
-              : "-translate-x-full lg:translate-x-0"
-          }`}
-      >
-        <CardContent className="relative">
-          {/* Close Button for Mobile */}
-          <button
-            className="absolute top-2 right-2 lg:hidden"
-            onClick={() => setIsSidebarOpen(false)}
-          >
-            <X size={20} />
-          </button>
-
-          <h2 className="text-lg font-semibold mb-4">Filter By Price</h2>
-          <div className="flex gap-2 mb-2">
-            <input
-              type="text"
-              placeholder="Min"
-              className="border rounded px-2 py-1 w-full"
-            />
-            <input
-              type="text"
-              placeholder="Max"
-              className="border rounded px-2 py-1 w-full"
-            />
-          </div>
-          <Slider
-            defaultValue={[price]}
-            max={100}
-            onValueChange={(val) => setPrice(val[0])}
-          />
-          <p className="mt-2">${price}</p>
-
-          <h2 className="text-lg font-semibold mt-6">Product Types</h2>
-          <ul className="space-y-2 mt-2">
-            {productTypes.map((type, index) => (
-              <li key={index} className="flex items-center gap-2">
-                <Checkbox />
-                <span>{type}</span>
-              </li>
+    <div className="p-6  bg-white rounded-lg">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-xl font-semibold">Filter</h2>
+        <Button size="sm" className="bg-black hover:bg-gray-700 ml-5">
+          Clear Filters
+        </Button>
+      </div>
+      {/* Filter by Price */}
+      <div className="mb-6">
+        <h2 className="text-lg font-semibold mb-4">Price</h2>
+        <div className="flex items-center justify-between text-sm mb-2">
+          <span>$0</span>
+          <span>$500000</span>
+        </div>
+        <Slider
+          max={500000}
+          step={1}
+          onValueChange={(value) => {
+            setPrice(value);
+            handleSearchQuery("price", value[0]);
+          }}
+          className="w-full"
+        />
+        <p className="text-sm mt-2">Selected Price: ${price[0]}</p>
+      </div>
+      {/* Product Types */}
+      <div className="mb-6">
+        <h2 className="text-lg font-semibold mb-4">Product Category</h2>
+        {!isLoading && (
+          <RadioGroup className="space-y-2">
+            {categories?.map((category: { _id: string; name: string }) => (
+              <div key={category._id} className="flex items-center space-x-2">
+                <RadioGroupItem
+                  onClick={() => handleSearchQuery("category", category._id)}
+                  value={category._id}
+                  id={category._id}
+                />
+                <Label
+                  htmlFor={category._id}
+                  className="text-gray-500 font-light"
+                >
+                  {category.name}
+                </Label>
+              </div>
             ))}
-          </ul>
-
-          <h2 className="text-lg font-semibold mt-6">Brands</h2>
-          <ul className="space-y-2 mt-2">
-            {brands.map((brand, index) => (
-              <li key={index} className="flex items-center gap-2">
-                <Checkbox />
-                <span>{brand}</span>
-              </li>
+          </RadioGroup>
+        )}
+      </div>
+      {/* Brands */}
+      <div className="mb-6">
+        <h2 className="text-lg font-semibold mb-4">Brands</h2>
+        {!isLoading && (
+          <RadioGroup className="space-y-2">
+            {brands?.map((brand: { _id: string; name: string }) => (
+              <div key={brand._id} className="flex items-center space-x-2">
+                <RadioGroupItem
+                  onClick={() => handleSearchQuery("brand", brand._id)}
+                  value={brand._id}
+                  id={brand._id}
+                />
+                <Label htmlFor={brand._id} className="text-gray-500 font-light">
+                  {brand.name}
+                </Label>
+              </div>
             ))}
-          </ul>
-
-          <h2 className="text-lg font-semibold mt-6">Rating</h2>
-          <ul className="space-y-2 mt-2">
-            {ratings.map((rating, index) => (
-              <li key={index} className="flex items-center gap-2">
-                <Checkbox />
-                <span className="text-yellow-500">
-                  {"★".repeat(rating)}
-                  {"☆".repeat(5 - rating)}
-                </span>
-              </li>
-            ))}
-          </ul>
-
-          <h2 className="text-lg font-semibold mt-6">Availability</h2>
-          <ul className="space-y-2 mt-2">
-            {availability.map((status, index) => (
-              <li key={index} className="flex items-center gap-2">
-                <Checkbox />
-                <span>{status}</span>
-              </li>
-            ))}
-          </ul>
-
-          {/* Apply Filter Button */}
-          <Button
-            className="mt-4 w-full"
-            onClick={() => setIsSidebarOpen(false)}
-          >
-            Apply Filters
-          </Button>
-        </CardContent>
-      </Card>
+          </RadioGroup>
+        )}
+      </div>
+      {/* Rating */}
+      <div className="mb-6">
+        <h2 className="text-lg font-semibold mb-4">Rating</h2>
+        <RadioGroup className="space-y-3">
+          {[5, 4, 3, 2, 1].map((rating) => (
+            <div key={rating} className="flex items-center space-x-2">
+              <RadioGroupItem
+                onClick={() => handleSearchQuery("rating", rating)}
+                value={`${rating}`}
+                id={`rating-${rating}`}
+              />
+              <Label htmlFor={`rating-${rating}`} className="flex items-center">
+                {Array.from({ length: 5 }, (_, i) => (
+                  <Star
+                    size={18}
+                    key={i}
+                    fill={i < rating ? "orange" : "lightgray"}
+                    stroke={i < rating ? "orange" : "lightgray"}
+                  />
+                ))}
+              </Label>
+            </div>
+          ))}
+        </RadioGroup>
+      </div>
     </div>
   );
-};
-
-export default FilterSidebar;
+}
