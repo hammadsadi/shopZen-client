@@ -1,6 +1,6 @@
 'use server'
 
-import { accessTokenVerify } from "@/lib/accessTokenVerify";
+import { accessTokenVerify, getValidateToken } from "@/lib/accessTokenVerify";
 import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 import { getRefreshToken } from "../AuthServices";
@@ -29,7 +29,6 @@ export const createBrand = async (data: FormData) => {
   }
 };
 
-
 // Get All Brands
 export const getAllBrand = async () => {
   try {
@@ -50,11 +49,12 @@ export const getAllBrand = async () => {
 
 // Delete Single Brands
 export const deleteSingleBrand = async (id: string) => {
+  const token = await getValidateToken();
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/brand/${id}`, {
       method: "DELETE",
       headers: {
-        Authorization: (await cookies()).get("accessToken")!.value,
+        Authorization: token,
       },
     });
     revalidateTag("BRAND");
