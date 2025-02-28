@@ -1,14 +1,24 @@
 'use server'
 
+import { accessTokenVerify } from "@/lib/accessTokenVerify";
 import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
+import { getRefreshToken } from "../AuthServices";
 // Create Brand
 export const createBrand = async (data: FormData) => {
+  // Access Generate Functionality
+  const cookieStore = await cookies();
+  let token = cookieStore.get("accessToken")!.value;
+  if (!token || (await accessTokenVerify(token))) {
+    const { data } = await getRefreshToken();
+    token = data?.accessToken;
+    cookieStore.set("accessToken", token);
+  }
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/brand`, {
       method: "POST",
       headers: {
-        Authorization: (await cookies()).get("accessToken")!.value,
+        Authorization: token,
       },
       body: data,
     });
