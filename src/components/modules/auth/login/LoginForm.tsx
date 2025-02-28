@@ -21,6 +21,7 @@ import { LoaderCircle } from "lucide-react";
 import { loginValidationSchema } from "./loginValidation";
 // import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useUser } from "@/context/UserContext";
 
 const LoginForm = () => {
   const form = useForm({
@@ -29,6 +30,7 @@ const LoginForm = () => {
   // const [reCaptchaStatus, setReCaptchaStatus] = useState(false);
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirectPath");
+  const { setIsLoading } = useUser();
   const router = useRouter();
   const {
     formState: { isSubmitting },
@@ -39,13 +41,14 @@ const LoginForm = () => {
     try {
       // Form Data Send to Server action
       const res = await userLogin(data);
+      setIsLoading(true);
       // Toast Handle
       if (res?.success) {
         toast.success(res?.message);
         if (redirect) {
           router.push(redirect);
         } else {
-          router.push("/profile");
+          router.push("/");
         }
       } else {
         toast.error(res?.message);

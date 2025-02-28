@@ -17,6 +17,7 @@ import { registerValidationSchema } from "./registerValidation";
 import { userRegister } from "@/services/AuthServices";
 import { toast } from "sonner";
 import { LoaderCircle } from "lucide-react";
+import { useUser } from "@/context/UserContext";
 
 const RegisterForm = () => {
   const form = useForm({
@@ -25,6 +26,7 @@ const RegisterForm = () => {
   const {
     formState: { isSubmitting },
   } = form;
+  const { setIsLoading } = useUser();
   // Form Value Watch
   const password = form.watch("password");
   const confirmPassword = form.watch("confirmPassword");
@@ -34,6 +36,7 @@ const RegisterForm = () => {
     try {
       // Form Data Send to Server action
       const res = await userRegister(data);
+      setIsLoading(true);
       // Toast Handle
       if (res?.success) {
         toast.success(res?.message);
