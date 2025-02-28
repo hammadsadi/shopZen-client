@@ -6,10 +6,17 @@ import { getAllCategory } from '@/services/Category';
 import { getAllProducts } from '@/services/Product';
 import { TCategory } from '@/types';
 import React from 'react'
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
 
-const AllProductPage = async () => {
-    const { data:categories} = await getAllCategory();
-    const { data:products } = await getAllProducts();
+const AllProductPage = async ({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}) => {
+  const params = await searchParams;
+  const { data: categories } = await getAllCategory();
+  const { data: products } = await getAllProducts(undefined, params);
+
   return (
     <div>
       <div>
@@ -39,6 +46,6 @@ const AllProductPage = async () => {
       </div>
     </div>
   );
-}
+};
 
 export default AllProductPage

@@ -43,14 +43,20 @@ export default function FilterSidebar() {
 
   // Handle Search Query
   const handleSearchQuery = (query: string, value: string | number) => {
-    router.push(`${pathname}?${query}=${value.toString()}`, { scroll: false });
+    const params = new URLSearchParams(searchParams.toString());
+    params.set(query, value.toString());
+    router.push(`${pathname}?${params}`, { scroll: false });
   };
 
   return (
     <div className="p-6  bg-white rounded-lg">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-semibold">Filter</h2>
-        <Button size="sm" className="bg-black hover:bg-gray-700 ml-5">
+        <Button
+          onClick={() => router.push(pathname, { scroll: false })}
+          size="sm"
+          className="bg-black hover:bg-gray-700 ml-5"
+        >
           Clear Filters
         </Button>
       </div>

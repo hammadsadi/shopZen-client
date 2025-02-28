@@ -44,10 +44,31 @@ export const updateProduct = async (
 };
 
 // Get All Product
-export const getAllProducts = async (page?: string) => {
+export const getAllProducts = async (
+  page?: string,
+  query?: { [key: string]: string | string[] | undefined }
+) => {
+  const params = new URLSearchParams();
+  // Price
+  if (query?.price) {
+    params.append("minPrice", "0");
+    params.append("maxPrice", query?.price.toString());
+  }
+  // Category
+  if (query?.category) {
+    params.append("categories", query?.category.toString());
+  }
+  // Brand
+  if (query?.brand) {
+    params.append("brands", query?.brand.toString());
+  }
+  // Rating
+  if (query?.rating) {
+    params.append("ratings", query?.rating.toString());
+  }
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_API}/product?page=${page}`,
+      `${process.env.NEXT_PUBLIC_BASE_API}/product?page=${page}&${params}`,
       {
         method: "GET",
         headers: {
