@@ -3,8 +3,11 @@ import FeaturesProducts from "@/components/modules/home/FeaturesProducts";
 import FlashSaleProducts from "@/components/modules/home/flashSale";
 import HeroSection from "@/components/modules/home/HeroSection";
 import TopBrandsSection from "@/components/modules/home/topBrands";
+import { getRefreshToken } from "@/services/AuthServices";
 
-const HomePage = () => {
+const HomePage = async () => {
+  const res = await getRefreshToken();
+  console.log(res);
   return (
     <div className="">
       <HeroSection />
